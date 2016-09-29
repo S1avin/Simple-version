@@ -1,0 +1,48 @@
+import sqlite3 as lite
+import time
+from datetime import date
+def main(par):
+    if par == "new": # New Item
+        con = lite.connect('main.db')
+        thing = []
+        with con:
+            cur = con.cursor()
+            while len(input("One more?")) > 0:
+                Id = input("Id - ") # ID
+                Title = input('Title - ') # Title
+                Location = input("Loc (0 if none) - ")  # location
+                thing = [(Id, Title, Location)]
+                con.executemany('insert into maintable values (?,?,?)', thing)
+                con.commit()
+            else: app()
+    elif par == "loc": # Change location
+        con = lite.connect("item.db")
+        with con:
+            while len(input("More? ")) > 0:
+                a = input("ID - ")
+                b = input("Location - ")
+                con.execute("UPDATE maintable set Location = ? where ID=?", (b,a))
+                con.commit()
+            else: app()
+    elif par == "Tit": # update Title
+        con = lite.connect('item.db')
+        with con:
+            cur = con.cursor()
+            while len(input("More?  ")) > 0:
+                c = input("ID - ")
+                b = input("Proper Title")
+                con.execute("UPDATE maintable set Name = ? where ID=?", (b,c))
+                con.commit()
+            else: app()
+    elif par == "??":
+        print("new - to add new item")
+        print("loc - to edit location")
+        print("tit - to edit title")
+        print("pass - to pass")
+        app()
+    elif par == "pass": pass   
+    else: app()
+def app():
+    v = input("Function mod:")
+    main(v)
+app()
